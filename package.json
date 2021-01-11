@@ -1,0 +1,22 @@
+{
+  "name": "@user-clone/nest-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"todo\""
+  },
+  "keywords": [
+    "nestjs",
+    "react",
+    "clone"
+  ],
+  "author": "simon",
+  "license": "ISC",
+  "workspaces": {
+    "packages": [
+      "workspaces/*"
+    ]
+  },
+  "private": true
+}
