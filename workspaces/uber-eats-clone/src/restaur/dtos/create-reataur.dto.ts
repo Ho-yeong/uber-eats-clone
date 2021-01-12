@@ -1,22 +1,5 @@
-import { ArgsType, Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsString, Length } from 'class-validator';
+import { ArgsType, Field, InputType, OmitType } from '@nestjs/graphql';
+import { Restaur } from '../entities/retaur.entity';
 
-@ArgsType()
-export class CreateReataurDto {
-  @Field(type => String)
-  @IsString()
-  @Length(5, 10)
-  name: string;
-
-  @Field(type => Boolean)
-  @IsBoolean()
-  isVegan: boolean;
-
-  @Field(type => String)
-  @IsString()
-  address: string;
-
-  @Field(type => String)
-  @IsString()
-  ownerName: string;
-}
+@InputType()
+export class CreateReataurDto extends OmitType(Restaur, ['id'], InputType) {}
