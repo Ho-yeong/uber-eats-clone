@@ -5,6 +5,9 @@ import { RestaurModule } from './restaur/restaur.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Restaur } from './restaur/entities/retaur.entity';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -30,12 +33,14 @@ import { Restaur } from './restaur/entities/retaur.entity';
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
-      entities: [Restaur],
+      entities: [Restaur, User],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),
     RestaurModule,
+    UsersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

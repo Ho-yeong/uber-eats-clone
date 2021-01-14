@@ -10,6 +10,8 @@
 - yarn add @nestjs/config
 - yarn add cross-env
 - yarn add joi (env validator)
+- yarn add bcrypt
+- yarn add @types/bcrypt -D
 
 
 
