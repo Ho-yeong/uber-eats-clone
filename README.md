@@ -12,6 +12,8 @@
 - yarn add joi (env validator)
 - yarn add bcrypt
 - yarn add @types/bcrypt -D
+- yarn add jsonwebtoken
+- yarn add @types/jsonwebtoken -D
 
 
 
