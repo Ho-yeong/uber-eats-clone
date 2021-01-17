@@ -14,6 +14,8 @@
 - yarn add @types/bcrypt -D
 - yarn add jsonwebtoken
 - yarn add @types/jsonwebtoken -D
+- yarn add got
+- yarn add form-data
 
 
 

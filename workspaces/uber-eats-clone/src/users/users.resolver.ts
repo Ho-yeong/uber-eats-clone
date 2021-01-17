@@ -6,45 +6,50 @@ import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthUser } from '../auth/auth-user.decorator';
+import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
+import { EditProfileInput, EditProfileOut } from '../restaur/dtos/edit-profile.dto';
+import { Verify } from 'crypto';
+import { VerifyEmailInput, VerifyEmailOnutput } from './dtos/verify-email.dto';
 
 @Resolver(of => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(returns => Boolean)
-  hi() {
-    return true;
-  }
-
   @Mutation(returns => CreateAccountOutput)
-  async createAccount(
+  createAccount(
     @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CreateAccountOutput> {
-    try {
-      return this.usersService.createAccount(createAccountInput);
-    } catch (err) {
-      return {
-        ok: false,
-        error: err,
-      };
-    }
+    return this.usersService.createAccount(createAccountInput);
   }
 
   @Mutation(returns => LoginOutput)
-  async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
-    try {
-      return this.usersService.login(loginInput);
-    } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
-    }
+  login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
+    return this.usersService.login(loginInput);
   }
 
   @Query(returns => User)
   @UseGuards(AuthGuard)
   me(@AuthUser() authUser: User) {
     return authUser;
+  }
+
+  @Query(returns => UserProfileOutput)
+  @UseGuards(AuthGuard)
+  userProfile(@Args() userProfileInput: UserProfileInput): Promise<UserProfileOutput> {
+    return this.usersService.findById(userProfileInput.userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(returns => EditProfileOut)
+  editProfile(
+    @AuthUser() authUser: User,
+    @Args('input') editProfileInput: EditProfileInput,
+  ): Promise<EditProfileOut> {
+    return this.usersService.editProfile(authUser.id, editProfileInput);
+  }
+
+  @Mutation(returns => VerifyEmailOnutput)
+  verifyEmail(@Args('input') { code }: VerifyEmailInput) {
+    return this.usersService.verifyEmail(code);
   }
 }
