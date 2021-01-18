@@ -62,7 +62,6 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
-  it.todo('createAccount');
   describe('createAccount', () => {
     const createAccountArgs = {
       email: '',
