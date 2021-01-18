@@ -3,7 +3,7 @@ import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql'
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { IsEnum, IsString } from 'class-validator';
-import { CoreEntity } from 'src/common/entities/core.entity';
+import { CoreEntity } from '../../common/entities/core.entity';
 
 enum UserRole {
   Client,
