@@ -84,12 +84,10 @@ export class UsersService {
         { id },
         { select: ['id', 'createdAt', 'password', 'email', 'updatedAt', 'updatedAt', 'verified'] },
       );
-      if (user) {
-        return {
-          ok: true,
-          user,
-        };
-      }
+      return {
+        ok: true,
+        user,
+      };
     } catch (error) {
       return { ok: false, error: 'User not found' };
     }
@@ -127,10 +125,7 @@ export class UsersService {
       }
       return { ok: false, error: 'Verification not found' };
     } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
+      return { ok: false, error: 'Could not verify email.' };
     }
   }
 }

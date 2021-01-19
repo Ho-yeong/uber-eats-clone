@@ -21,7 +21,6 @@ export class MailService {
     form.append('template', template);
     emailVars.forEach(eVar => form.append(`v:${eVar.key}`, eVar.value));
     try {
-      console.log(emailVars);
       await got(`https://api.mailgun.net/v3/${this.options.domain}/messages`, {
         headers: {
           Authorization: `Basic ${Buffer.from(`api:${this.options.apiKey}`).toString('base64')}`,
@@ -29,10 +28,8 @@ export class MailService {
         body: form,
         method: 'POST',
       });
-      console.log('email sent');
       return true;
     } catch (error) {
-      console.log(error);
       return false;
     }
   }
