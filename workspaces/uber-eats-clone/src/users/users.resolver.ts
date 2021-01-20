@@ -7,7 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthUser } from '../auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
-import { EditProfileInput, EditProfileOut } from '../restaur/dtos/edit-profile.dto';
+import { EditProfileInput, EditProfileOut } from './dtos/edit-profile.dto';
 import { VerifyEmailInput, VerifyEmailOnutput } from './dtos/verify-email.dto';
 
 @Resolver(of => User)

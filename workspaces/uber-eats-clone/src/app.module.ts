@@ -1,10 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import * as Joi from 'joi';
 import { GraphQLModule } from '@nestjs/graphql';
-import { RestaurModule } from './restaur/restaur.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { Restaur } from './restaur/entities/retaur.entity';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
@@ -13,6 +12,8 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
 import { AuthModule } from './auth/auth.module';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
+import { Restaurant } from './restaurant/entities/retaurant.entity';
+import { Category } from './restaurant/entities/category.entity';
 
 @Module({
   imports: [
@@ -42,13 +43,13 @@ import { MailModule } from './mail/mail.module';
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [Restaur, User, Verification],
+      entities: [Restaurant, Category, User, Verification],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       context: ({ req }) => ({ user: req['user'] }),
     }),
-    RestaurModule,
+    RestaurantModule,
     UsersModule,
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,

@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAccountInput } from './dtos/create-account.dto';
 import { LoginInput } from './dtos/login.dto';
 import { JwtService } from '../jwt/jwt.service';
-import { EditProfileInput } from '../restaur/dtos/edit-profile.dto';
+import { EditProfileInput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 import { VerifyEmailOnutput } from './dtos/verify-email.dto';
 import { UserProfileOutput } from './dtos/user-profile.dto';
@@ -99,6 +99,7 @@ export class UsersService {
       if (email) {
         user.email = email;
         user.verified = false;
+        this.verifications.delete({user: {id: user.id}})
         const verification = await this.verifications.save(this.verifications.create({ user }));
         this.mailService.sendVerificationEmail(user.email, verification.code);
       }
