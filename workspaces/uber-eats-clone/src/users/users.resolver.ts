@@ -9,6 +9,7 @@ import { AuthUser } from '../auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { EditProfileInput, EditProfileOut } from './dtos/edit-profile.dto';
 import { VerifyEmailInput, VerifyEmailOnutput } from './dtos/verify-email.dto';
+import { Role } from '../auth/role.decorator';
 
 @Resolver(of => User)
 export class UsersResolver {
@@ -27,19 +28,19 @@ export class UsersResolver {
   }
 
   @Query(returns => User)
-  @UseGuards(AuthGuard)
+  @Role(['Any'])
   me(@AuthUser() authUser: User) {
     return authUser;
   }
 
   @Query(returns => UserProfileOutput)
-  @UseGuards(AuthGuard)
+  @Role(['Any'])
   userProfile(@Args() userProfileInput: UserProfileInput): Promise<UserProfileOutput> {
     return this.usersService.findById(userProfileInput.userId);
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(returns => EditProfileOut)
+  @Role(['Any'])
   editProfile(
     @AuthUser() authUser: User,
     @Args('input') editProfileInput: EditProfileInput,

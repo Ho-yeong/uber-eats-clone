@@ -82,7 +82,18 @@ export class UsersService {
     try {
       const user = await this.users.findOneOrFail(
         { id },
-        { select: ['id', 'createdAt', 'password', 'email', 'updatedAt', 'updatedAt', 'verified'] },
+        {
+          select: [
+            'id',
+            'createdAt',
+            'password',
+            'email',
+            'updatedAt',
+            'updatedAt',
+            'verified',
+            'role',
+          ],
+        },
       );
       return {
         ok: true,
@@ -99,7 +110,7 @@ export class UsersService {
       if (email) {
         user.email = email;
         user.verified = false;
-        this.verifications.delete({user: {id: user.id}})
+        this.verifications.delete({ user: { id: user.id } });
         const verification = await this.verifications.save(this.verifications.create({ user }));
         this.mailService.sendVerificationEmail(user.email, verification.code);
       }

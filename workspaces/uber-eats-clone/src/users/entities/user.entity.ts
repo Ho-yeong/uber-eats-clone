@@ -6,10 +6,10 @@ import { IsBoolean, IsEnum, IsString } from 'class-validator';
 import { CoreEntity } from '../../common/entities/core.entity';
 import { Restaurant } from '../../restaurant/entities/retaurant.entity';
 
-enum UserRole {
-  Client,
-  Owner,
-  Delivery,
+export enum UserRole {
+  Client = 'Client',
+  Owner = 'Owner',
+  Delivery = 'Delivery',
 }
 
 registerEnumType(UserRole, { name: 'UserRole' });
@@ -57,10 +57,8 @@ export class User extends CoreEntity {
   async checkPassword(aPassword: string): Promise<boolean> {
     try {
       const ok = await bcrypt.compare(aPassword, this.password);
-      console.log(ok);
       return ok;
     } catch (err) {
-      console.log(err);
       throw new InternalServerErrorException();
     }
   }
