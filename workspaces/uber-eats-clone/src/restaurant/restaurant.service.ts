@@ -1,16 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { Restaurant } from './entities/retaurant.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Raw, Repository } from 'typeorm';
 import { CreateRestaurantInput, CreateRestaurantOutput } from './dtos/create-restaurant.dto';
 import { User } from '../users/entities/user.entity';
+import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restaurant.dto';
+import { CategoryRepository } from './repositories/category.repository';
 import { Category } from './entities/category.entity';
+import { DeleteRestaurantInput, DeleteRestaurantOutput } from './dtos/delete-restaurant.dto';
+import { AllCategoryOutput } from './dtos/all-category.dto';
+import { CategoryInput, CategoryOutput } from './dtos/category.dto';
+import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
+import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
+import { SearchRestaurantInput, SearchRestaurantOutput } from './dtos/search-restaurant.dto';
 
 @Injectable()
 export class RestaurantService {
   constructor(
     @InjectRepository(Restaurant) private readonly restaurant: Repository<Restaurant>,
-    @InjectRepository(Category) private readonly categories: Repository<Category>,
+    private readonly categories: CategoryRepository,
   ) {}
 
   async createRestaurant(
@@ -20,20 +28,155 @@ export class RestaurantService {
     try {
       const newRestaurant = this.restaurant.create(createRestaurantInput);
       newRestaurant.owner = owner;
-      const categoryName = createRestaurantInput.categoryName.trim().toLowerCase();
-      const categorySlug = categoryName.replace(/ /g, '-');
-      let category = await this.categories.findOne({ slug: categorySlug });
-      if (!category) {
-        category = await this.categories.save(
-          this.categories.create({ slug: categorySlug, name: categoryName }),
-        );
-      }
+
+      const category = await this.categories.getOrCreate(createRestaurantInput.categoryName);
+
       newRestaurant.category = category;
 
       await this.restaurant.save(newRestaurant);
       return { ok: true };
     } catch (err) {
       return { ok: false, error: "Couldn't create a restaurant" };
+    }
+  }
+
+  async editRestaurant(
+    owner: User,
+    editRestaurantInput: EditRestaurantInput,
+  ): Promise<EditRestaurantOutput> {
+    try {
+      const restaurant = await this.restaurant.findOne(editRestaurantInput.restaurantId, {
+        loadRelationIds: true,
+      });
+      if (!restaurant) {
+        return { ok: false, error: 'Restaurant Not Found' };
+      }
+      if (owner.id !== restaurant.ownerId) {
+        return { ok: false, error: "You can't edit a restaurant that you don't own" };
+      }
+
+      let category: Category = null;
+      if (editRestaurantInput.categoryName) {
+        category = await this.categories.getOrCreate(editRestaurantInput.categoryName);
+      }
+      await this.restaurant.save([
+        {
+          id: editRestaurantInput.restaurantId,
+          ...editRestaurantInput,
+          ...(category && { category }),
+        },
+      ]);
+
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: "Couldn't edit a restaurant" };
+    }
+  }
+
+  async deleteRestaurant(
+    owner: User,
+    { restaurantId }: DeleteRestaurantInput,
+  ): Promise<DeleteRestaurantOutput> {
+    try {
+      const restaurant = await this.restaurant.findOne(restaurantId, {
+        loadRelationIds: true,
+      });
+      if (!restaurant) {
+        return { ok: false, error: 'Restaurant Not Found' };
+      }
+      if (owner.id !== restaurant.ownerId) {
+        return { ok: false, error: "You can't edit a restaurant that you don't own" };
+      }
+
+      await this.restaurant.delete(restaurantId);
+
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: "Couldn't delete a restaurant" };
+    }
+  }
+
+  async allCategories(): Promise<AllCategoryOutput> {
+    try {
+      const categories = await this.categories.find();
+      return {
+        ok: true,
+        categories,
+      };
+    } catch (err) {
+      return { ok: false, error: "Couldn't load categories" };
+    }
+  }
+
+  countRestaurants(category: Category) {
+    return this.restaurant.count({ category });
+  }
+
+  async findCategoryBySlug({ slug, page }: CategoryInput): Promise<CategoryOutput> {
+    try {
+      const category = await this.categories.findOne({ slug });
+      if (!category) {
+        return { ok: false, error: 'Category Not Found' };
+      }
+
+      const restaurants = await this.restaurant.find({
+        where: { category },
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+
+      const totalResults = await this.countRestaurants(category);
+
+      return { ok: true, category, totalPages: Math.ceil(totalResults / 25), restaurants };
+    } catch (err) {
+      return { ok: false, error: "Couldn't load category" };
+    }
+  }
+
+  async allRestaurants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
+    try {
+      const [restaurants, totalResults] = await this.restaurant.findAndCount({
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+      return {
+        ok: true,
+        results: restaurants,
+        totalPages: Math.ceil(totalResults / 25),
+        totalResults,
+      };
+    } catch (err) {
+      return { ok: false, error: "Couldn't load restaurants" };
+    }
+  }
+
+  async findRestaurantById({ restaurantId }: RestaurantInput): Promise<RestaurantOutput> {
+    try {
+      const restaurant = await this.restaurant.findOne(restaurantId);
+      if (!restaurant) {
+        return { ok: false, error: 'Restaurant Not Found' };
+      }
+
+      return { ok: true, restaurant };
+    } catch (err) {
+      return { ok: false, error: "Couldn't find a restaurant" };
+    }
+  }
+
+  async searchRestaurantByName({
+    query,
+    page,
+  }: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
+    try {
+      // for mysql = Raw(name => `${name} LIKE BINARY '%${query}%'`)
+      const [restaurants, totalResults] = await this.restaurant.findAndCount({
+        where: { name: Raw(name => `${name} ILIKE '%${query}%'`) },
+        take: 25,
+        skip: (page - 1) * 25,
+      });
+      return { ok: true, restaurants, totalResults, totalPages: Math.ceil(totalResults / 25) };
+    } catch (err) {
+      return { ok: false, error: "Couldn't search for restaurants" };
     }
   }
 }
