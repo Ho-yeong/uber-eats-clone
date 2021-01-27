@@ -14,6 +14,7 @@ import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
 import { Restaurant } from './restaurant/entities/retaurant.entity';
 import { Category } from './restaurant/entities/category.entity';
+import { Dish } from './restaurant/entities/dish.entity';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { Category } from './restaurant/entities/category.entity';
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [Restaurant, Category, User, Verification],
+      entities: [Restaurant, Category, User, Verification, Dish],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
