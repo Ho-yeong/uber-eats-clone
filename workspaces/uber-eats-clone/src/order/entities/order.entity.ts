@@ -4,6 +4,8 @@ import { CoreEntity } from '../../common/entities/core.entity';
 import { User } from '../../users/entities/user.entity';
 import { Restaurant } from '../../restaurant/entities/retaurant.entity';
 import { Dish } from '../../restaurant/entities/dish.entity';
+import { OrderItem } from './order-item.entity';
+import { IsEnum, IsNumber } from 'class-validator';
 
 export enum OrderStatus {
   Pending = 'Pending',
@@ -30,19 +32,21 @@ export class Order extends CoreEntity {
     onDelete: 'SET NULL',
     nullable: true,
   })
-  @Field(type => Restaurant)
+  @Field(type => Restaurant, { nullable: true })
   restaurant: Restaurant;
 
-  @ManyToMany(type => Dish)
+  @ManyToMany(type => OrderItem)
   @JoinTable() // order own dishes
-  @Field(type => [Dish])
-  dishes: Dish[];
+  @Field(type => [OrderItem])
+  items: OrderItem[];
 
-  @Column()
-  @Field(type => Number)
+  @Column({ nullable: true })
+  @Field(type => Number, { nullable: true })
+  @IsNumber()
   total: number;
 
-  @Column({ type: 'enum', enum: OrderStatus })
+  @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.Pending })
   @Field(type => OrderStatus)
+  @IsEnum(OrderStatus)
   status: OrderStatus;
 }
