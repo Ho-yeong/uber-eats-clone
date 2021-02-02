@@ -17,8 +17,18 @@
 - yarn add got
 - yarn add form-data
 
+## libraries - client
+- yarn add @apollo/client
+- yarn add apollo (global also!)
+- yarn add react-hook-form
+- yarn add postcss
+- yarn add autofixer
+- yarn add tailwind
+- yarn add tailwindcss
+- 
 
-
+# apollo code
+- apollo client:codegen mytypes.d.ts --target=typescript
 
 ## User Model:
 - id
