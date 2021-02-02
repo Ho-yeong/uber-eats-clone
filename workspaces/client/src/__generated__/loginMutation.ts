@@ -4,21 +4,21 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: PotataoMutation
+// GraphQL mutation operation: loginMutation
 // ====================================================
 
-export interface PotataoMutation_login {
+export interface loginMutation_login {
   __typename: "LoginOutput";
   ok: boolean;
   error: string | null;
   token: string | null;
 }
 
-export interface PotataoMutation {
-  login: PotataoMutation_login;
+export interface loginMutation {
+  login: loginMutation_login;
 }
 
-export interface PotataoMutationVariables {
+export interface loginMutationVariables {
   email: string;
   password: string;
 }
