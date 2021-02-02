@@ -28,7 +28,7 @@
 - 
 
 # apollo code
-- apollo client:codegen mytypes.d.ts --target=typescript
+- apollo client:codegen src/__generated__ --target=typescript --outputFlat
 
 ## User Model:
 - id
