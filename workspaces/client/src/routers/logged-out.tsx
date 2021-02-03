@@ -4,6 +4,7 @@ import { CreateAccount } from '../pages/create-account';
 import { Login } from '../pages/login';
 
 export const LoggedOutRouter = () => {
+
   
   return <Router>
     <Switch>
@@ -16,5 +17,5 @@ export const LoggedOutRouter = () => {
     </Switch>
   </Router>
     
-  
+
 };
