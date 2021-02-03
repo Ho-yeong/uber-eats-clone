@@ -25,10 +25,13 @@
 - yarn add autofixer
 - yarn add tailwind
 - yarn add tailwindcss
-- 
+- yarn add rimraf
+- yarn add react-helmet (yarn add react-helmet-async) (bc of warning)
 
-# apollo code
+## apollo code
 - apollo client:codegen src/__generated__ --target=typescript --outputFlat
+- mac or linux
+  rm -rf src/__generated__ 
 
 ## User Model:
 - id
