@@ -8,7 +8,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { AuthUser } from '../auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { EditProfileInput, EditProfileOut } from './dtos/edit-profile.dto';
-import { VerifyEmailInput, VerifyEmailOnutput } from './dtos/verify-email.dto';
+import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
 import { Role } from '../auth/role.decorator';
 
 @Resolver(of => User)
@@ -48,7 +48,7 @@ export class UsersResolver {
     return this.usersService.editProfile(authUser.id, editProfileInput);
   }
 
-  @Mutation(returns => VerifyEmailOnutput)
+  @Mutation(returns => VerifyEmailOutput)
   verifyEmail(@Args('input') { code }: VerifyEmailInput) {
     return this.usersService.verifyEmail(code);
   }

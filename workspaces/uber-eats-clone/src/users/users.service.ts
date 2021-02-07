@@ -7,7 +7,7 @@ import { LoginInput } from './dtos/login.dto';
 import { JwtService } from '../jwt/jwt.service';
 import { EditProfileInput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
-import { VerifyEmailOnutput } from './dtos/verify-email.dto';
+import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 import { MailService } from '../mail/mail.service';
 
@@ -48,7 +48,7 @@ export class UsersService {
     password,
   }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
     //check if the password is correct
-    // make a JWT and give ti to the user
+    // make a JWT and give it to the user
     try {
       //find the user with the email
       const user = await this.users.findOne({ email }, { select: ['password', 'id'] });
@@ -126,7 +126,7 @@ export class UsersService {
     }
   }
 
-  async verifyEmail(code: string): Promise<VerifyEmailOnutput> {
+  async verifyEmail(code: string): Promise<VerifyEmailOutput> {
     try {
       const verification = await this.verifications.findOne({ code }, { relations: ['user'] });
       if (verification) {

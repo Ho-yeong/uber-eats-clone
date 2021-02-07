@@ -42,7 +42,7 @@ export const CreateAccount = () => {
         if(ok){
             alert('Account Created! Log in now!')
             // redirect
-            history.push('/login')
+            history.push('/')
         }
     }
 
@@ -76,7 +76,7 @@ export const CreateAccount = () => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <input 
-                        ref={register({ required: "Email is required", pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })} 
+                        ref={register({ required: "Email is required", pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })} 
                         type="email" 
                         name="email"
                         placeholder="Email" 
@@ -110,7 +110,7 @@ export const CreateAccount = () => {
                 </form>
                 <div>
                     Already use Uber? {" "}
-                    <Link to="/login" className="text-lime-600 hover:underline">
+                    <Link to="/" className="text-lime-600 hover:underline">
                         Sign in
                     </Link>
                 </div>
