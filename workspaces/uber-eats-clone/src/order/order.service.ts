@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from './entities/order.entity';
+import { Order, OrderStatus } from './entities/order.entity';
 import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
 import { CreateOrderInput, CreateOrderOutput } from './dto/create-order.dto';
 import { Restaurant } from '../restaurant/entities/retaurant.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { Dish } from '../restaurant/entities/dish.entity';
+import { GetOrdersInput, GetOrdersOutput } from './dto/get-orders.dto';
+import { GetOrderInput, GetOrderOutput } from './dto/get-order.dto';
+import { EditOrderInput, EditOrderOutput } from './dto/edit-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -75,6 +78,108 @@ export class OrderService {
       return { ok: true };
     } catch (err) {
       return { ok: false, error: "Couldn't create order" };
+    }
+  }
+
+  async getOrders(user: User, { status } : GetOrdersInput): Promise<GetOrdersOutput> {
+    try {
+      let orders: Order[];
+      if(user.role === UserRole.Client) {
+        orders = await this.orders.find({where: {
+          customer: user,
+          ...(status && {status})
+        }})
+      } else if (user.role === UserRole.Delivery) {
+        orders = await this.orders.find({where: {
+          driver: user,
+          ...(status && {status})
+        }})
+      } else if (user.role === UserRole.Owner) {
+        const restaurants = await this.restaurants.find({where : {
+          owner : user,
+        },
+          relations: ['orders']
+        })
+        orders = restaurants.map(restaurant => restaurant.orders).flat(1);
+        if(status) {
+          orders = orders.filter(order => order.status === status)
+        }
+      }
+      return { ok: true, orders}
+    } catch(err) {
+      return { ok: false, error: "Couldn't get orders"}
+    } 
+  }
+
+  canSeeOrder(user: User, order: Order): boolean {
+    let canSee = true
+      if(user.role === UserRole.Client && order.customerId !== user.id){
+        canSee = false;
+      }
+      if(user.role === UserRole.Delivery && order.driverId !== user.id){
+        canSee = false;
+      }
+      if(user.role === UserRole.Owner && order.restaurant.ownerId !== user.id){
+        canSee = false
+      }
+      return canSee
+  }
+
+  async getOrder(user: User, { id: orderId }: GetOrderInput): Promise<GetOrderOutput> {
+    try {
+      const order = await this.orders.findOne(orderId, {relations: ['restaurant', 'items']});
+      if(!order){
+        return { ok: false, error: 'Order not found'}
+      }
+      
+      
+      if(!this.canSeeOrder(user, order)){
+        return { ok: false, error: "You can't see that"}
+      }
+      return { ok: true, order}
+      
+    } catch(err) {
+      return { ok: false, error: "Couldn't get order"}
+    }
+  }
+
+  async editOrder(user: User, { id: orderId, status }: EditOrderInput): Promise<EditOrderOutput> {
+    try{
+
+      const order = await this.orders.findOne(orderId, {relations: ['restaurant']});
+      if(!order){
+        return { ok: false, error: "Order not found"}
+      }
+      if(!this.canSeeOrder(user, order)){
+        return { ok: false, error: "You can't see this"}
+      }
+      let canEdit = true;
+      if(user.role === UserRole.Client){
+        canEdit = false;
+      }
+
+      if(user.role === UserRole.Owner){
+        if(status !== OrderStatus.Cooking && status !== OrderStatus.Cooked) {
+          canEdit = false;
+        }
+      }
+      if(user.role === UserRole.Delivery) {
+        if(status !== OrderStatus.PickedUp && status !== OrderStatus.Delivered){
+          canEdit = false;
+        }
+      }
+      if(!canEdit) {
+        return { ok: false, error: "You can't edit a order"}
+      }
+      
+      await this.orders.save([{
+        id: orderId,
+        status
+      }])
+      return { ok: true }
+
+    } catch(err) {
+      return { ok: false, error: "Couldn't edit a order"}
     }
   }
 }

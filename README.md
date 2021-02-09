@@ -16,6 +16,7 @@
 - yarn add @types/jsonwebtoken -D
 - yarn add got
 - yarn add form-data
+- yarn add graphql-subscriptions
 
 ## libraries - client
 - yarn add @apollo/client

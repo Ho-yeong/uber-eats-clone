@@ -52,7 +52,14 @@ import { OrderItem } from './order/entities/order-item.entity';
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      context: ({ req }) => ({ user: req['user'] }),
+      installSubscriptionHandlers: true,
+      context: ({ req, connection }) => {
+        if(req){
+          return { user: req['user'] }
+        } else {
+          console.log(connection)
+        }
+      },
     }),
     RestaurantModule,
     UsersModule,

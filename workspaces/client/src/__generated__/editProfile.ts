@@ -20,5 +20,5 @@ export interface editProfile {
 }
 
 export interface editProfileVariables {
-  input?: EditProfileInput | null;
+  input: EditProfileInput;
 }
