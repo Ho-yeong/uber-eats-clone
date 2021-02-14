@@ -29,18 +29,18 @@ export class OrderResolver {
   @Role(['Any'])
   async getOrders(
     @AuthUser() user: User,
-    @Args('input') getOrdersInput: GetOrdersInput
+    @Args('input') getOrdersInput: GetOrdersInput,
   ): Promise<GetOrdersOutput> {
-    return this.service.getOrders(user, getOrdersInput)
+    return this.service.getOrders(user, getOrdersInput);
   }
 
   @Query(returns => GetOrderOutput)
   @Role(['Any'])
   async getOrder(
     @AuthUser() user: User,
-    @Args('input') getOrderInput: GetOrderInput
+    @Args('input') getOrderInput: GetOrderInput,
   ): Promise<GetOrderOutput> {
-    return this.service.getOrder(user, getOrderInput)
+    return this.service.getOrder(user, getOrderInput);
   }
 
   @Mutation(returns => EditOrderOutput)
@@ -54,13 +54,13 @@ export class OrderResolver {
 
   @Mutation(returns => Boolean)
   ready() {
-    pubsub.publish('hot', {readyHot: 'idgaf'})
+    pubsub.publish('hot', { readyHot: 'idgaf' });
     return true;
   }
 
   @Subscription(returns => String)
-  readyHot(){
-    return pubsub.asyncIterator("hot")
+  @Role(['Any'])
+  readyHot(@AuthUser() user: User) {
+    return pubsub.asyncIterator('hot');
   }
-
 }

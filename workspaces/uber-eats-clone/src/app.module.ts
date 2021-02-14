@@ -54,11 +54,8 @@ import { OrderItem } from './order/entities/order-item.entity';
       autoSchemaFile: true,
       installSubscriptionHandlers: true,
       context: ({ req, connection }) => {
-        if(req){
-          return { user: req['user'] }
-        } else {
-          console.log(connection)
-        }
+        const TOKEN_KEY = 'x-jwt';
+        return { token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY] };
       },
     }),
     RestaurantModule,
@@ -77,15 +74,18 @@ import { OrderItem } from './order/entities/order-item.entity';
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
-  // main.ts에 app.middleware 를 사용해서 적용시키는 방법이랑 똑같다
-  // 차이점은 밑의 설정에 path 에 적용시키고 싶은 범위를 설정할 수 있다.
-  // middleware 가 함수일때만 main.ts에 적용가능
-  // configure 은 class 일때도 적용 가능하다.
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes({
-      path: '/graphql',
-      method: RequestMethod.POST,
-    });
-  }
-}
+export class AppModule {}
+
+// subscription 은 HTTP 프로토콜을 사용하지 않기 때문에 미들웨어에서 토큰 인증을 할 수 없음
+// export class AppModule implements NestModule {
+// main.ts에 app.middleware 를 사용해서 적용시키는 방법이랑 똑같다
+// 차이점은 밑의 설정에 path 에 적용시키고 싶은 범위를 설정할 수 있다.
+// middleware 가 함수일때만 main.ts에 적용가능
+// configure 은 class 일때도 적용 가능하다.
+// configure(consumer: MiddlewareConsumer) {
+//   consumer.apply(JwtMiddleware).forRoutes({
+//     path: '/graphql',
+//     method: RequestMethod.POST,
+//   });
+// }
+// }
