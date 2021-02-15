@@ -70,6 +70,7 @@ import { OrderItem } from './order/entities/order-item.entity';
     }),
     AuthModule,
     OrdersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

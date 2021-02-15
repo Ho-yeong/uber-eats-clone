@@ -10,7 +10,13 @@ import { GetOrderInput, GetOrderOutput } from './dto/get-order.dto';
 import { EditOrderInput, EditOrderOutput } from './dto/edit-order.dto';
 import { PubSub } from 'graphql-subscriptions';
 import { Inject } from '@nestjs/common';
-import { PUB_SUB } from '../common/common.constants';
+import {
+  NEW_COOKED_ORDER,
+  NEW_ORDER_UPDATE,
+  NEW_PENDING_ORDER,
+  PUB_SUB,
+} from '../common/common.constants';
+import { OrderUpdatesInput } from './dto/order-updates.dto';
 
 @Resolver(of => Order)
 export class OrderResolver {
@@ -55,15 +61,30 @@ export class OrderResolver {
     return this.service.editOrder(user, editOrderInput);
   }
 
-  @Mutation(returns => Boolean)
-  ready() {
-    this.pubSub.publish('hot', { readyHot: 'idgaf' });
-    return true;
+  // context === subscription 하고 있는 사람
+  @Subscription(returns => Order, {
+    // (payload, args, context)
+    filter: ({ pendingOrders: { ownerId } }, _, { user }) => {
+      return ownerId === user.id;
+    },
+    resolve: ({ pendingOrders: { order } }) => {
+      return order;
+    },
+  })
+  @Role(['Owner'])
+  pendingOrders() {
+    return this.pubSub.asyncIterator(NEW_PENDING_ORDER);
   }
 
-  @Subscription(returns => String)
+  @Subscription(returns => Order)
+  @Role(['Delivery'])
+  cookedOrders() {
+    return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
+  }
+
+  @Subscription(returns => Order)
   @Role(['Any'])
-  readyHot(@AuthUser() user: User) {
-    return this.pubSub.asyncIterator('hot');
+  orderUpdates(@Args('input') orderUpdatesInput: OrderUpdatesInput) {
+    return this.pubSub.asyncIterator(NEW_ORDER_UPDATE);
   }
 }
