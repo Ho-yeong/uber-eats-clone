@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
 import { LessThan, Repository } from 'typeorm';
@@ -15,6 +15,8 @@ export class PaymentService {
     @InjectRepository(Restaurant) private readonly restaurants: Repository<Restaurant>,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
+
+  private readonly logger = new Logger();
 
   async createPayment(
     owner: User,
@@ -71,4 +73,9 @@ export class PaymentService {
       await this.restaurants.save(restaurant);
     }
   }
+
+  // @Interval(2000)
+  // async test() {
+  //   this.logger.log('test');
+  // }
 }

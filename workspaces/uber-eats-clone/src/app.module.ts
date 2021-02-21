@@ -21,6 +21,7 @@ import { OrderItem } from './order/entities/order-item.entity';
 import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/entities/payment.entity';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MyLoggerModule } from './my-logger/my-logger.module';
 
 //test
 @Module({
@@ -76,6 +77,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CommonModule,
     PaymentsModule,
     ScheduleModule.forRoot(),
+    MyLoggerModule,
   ],
   controllers: [],
   providers: [],
