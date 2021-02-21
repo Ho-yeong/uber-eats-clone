@@ -17,6 +17,7 @@ import {
   PUB_SUB,
 } from '../common/common.constants';
 import { OrderUpdatesInput } from './dto/order-updates.dto';
+import { TakeOrderInput, TakeOrderOutput } from './dto/take-order.dto';
 
 @Resolver(of => Order)
 export class OrderResolver {
@@ -82,9 +83,33 @@ export class OrderResolver {
     return this.pubSub.asyncIterator(NEW_COOKED_ORDER);
   }
 
-  @Subscription(returns => Order)
+  @Subscription(returns => Order, {
+    filter: (
+      { orderUpdates: order }: { orderUpdates: Order },
+      { input }: { input: OrderUpdatesInput },
+      { user }: { user: User },
+    ) => {
+      if (
+        order.driverId !== user.id &&
+        order.customerId !== user.id &&
+        order.restaurant.ownerId !== user.id
+      ) {
+        return false;
+      }
+      return order.id === input.id;
+    },
+  })
   @Role(['Any'])
   orderUpdates(@Args('input') orderUpdatesInput: OrderUpdatesInput) {
     return this.pubSub.asyncIterator(NEW_ORDER_UPDATE);
+  }
+
+  @Mutation(returns => TakeOrderOutput)
+  @Role(['Delivery'])
+  takeOrder(
+    @AuthUser() user: User,
+    @Args('input') takeOrderInput: TakeOrderInput,
+  ): Promise<TakeOrderOutput> {
+    return this.service.takeOrder(user, takeOrderInput);
   }
 }
