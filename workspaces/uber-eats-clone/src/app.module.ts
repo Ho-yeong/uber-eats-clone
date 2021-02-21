@@ -20,6 +20,7 @@ import { Order } from './order/entities/order.entity';
 import { OrderItem } from './order/entities/order-item.entity';
 import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/entities/payment.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 //test
 @Module({
@@ -74,6 +75,7 @@ import { Payment } from './payments/entities/payment.entity';
     OrdersModule,
     CommonModule,
     PaymentsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],
