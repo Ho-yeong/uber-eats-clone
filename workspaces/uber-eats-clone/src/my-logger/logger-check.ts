@@ -15,15 +15,10 @@ export function logFileCheck(message: string) {
       });
     }
   });
-  fs.open(file, 'a+', function (err, fd) {
-    console.log(fd);
-    if (fd === 9) {
-      console.log('file create.');
-    } else {
-      fs.appendFile(file, `[${new Date()}] ${message} \n`, function (err) {
-        if (err) throw err;
-        console.log('The "data to append" was appended to file!');
-      });
-    }
+  fs.open(file, 'a+', () => {
+    fs.appendFile(file, `[${new Date()}] ${message} \n`, function (err) {
+      if (err) throw err;
+      console.log('The "data to append" was appended to file!');
+    });
   });
 }

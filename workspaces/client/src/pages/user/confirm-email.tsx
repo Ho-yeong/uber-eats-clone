@@ -5,66 +5,63 @@ import { useMe } from '../../hooks/useMe';
 import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-
 const VERIFIY_EMAIL_MUTATION = gql`
-    mutation verifyEmail($input: VerifyEmailInput!) {
-        verifyEmail(input: $input) {
-            ok
-            error
-        }
+  mutation verifyEmail($input: VerifyEmailInput!) {
+    verifyEmail(input: $input) {
+      ok
+      error
     }
+  }
 `;
 
-
 export const ConfirmEmail = () => {
+  const { data: userData } = useMe();
+  const client = useApolloClient();
+  const history = useHistory();
 
-    const { data: userData } = useMe();
-    const client = useApolloClient();
-    const history = useHistory();
-
-    const onCompleted= (data: verifyEmail) => {
-        const { verifyEmail: { ok } } = data;
-        if(ok && userData?.me.id){
-            client.writeFragment({
-                id: `User:${userData.me.id}`,
-                fragment: gql`
-                    fragment VerifiedUser on User {
-                        verified
-                    }
-                `,
-                data: {
-                    verified: true
-                }
-            })
-            history.push('/')
-        }
+  const onCompleted = (data: verifyEmail) => {
+    const {
+      verifyEmail: { ok },
+    } = data;
+    if (ok && userData?.me.id) {
+      client.writeFragment({
+        id: `User:${userData.me.id}`,
+        fragment: gql`
+          fragment VerifiedUser on User {
+            verified
+          }
+        `,
+        data: {
+          verified: true,
+        },
+      });
+      history.push('/');
     }
+  };
 
-    const [ verifyEmail, {loading: verifyingEmail }] = useMutation<verifyEmail, verifyEmailVariables>(VERIFIY_EMAIL_MUTATION,
-        {
-            onCompleted
-        });
+  const [verifyEmail] = useMutation<verifyEmail, verifyEmailVariables>(VERIFIY_EMAIL_MUTATION, {
+    onCompleted,
+  });
 
-    useEffect(() => {
-        const [, code] = window.location.href.split("code=");
-        
-        verifyEmail({
-            variables: {
-                input: {
-                    code
-                }
-            }
-        })
+  useEffect(() => {
+    const [, code] = window.location.href.split('code=');
 
-    }, [])
+    verifyEmail({
+      variables: {
+        input: {
+          code,
+        },
+      },
+    });
+  }, []);
 
-    return (
-        <div className="mt-52 flex flex-col items-center justify-center">
-            <Helmet>
-                <title>Verify Email | Uber eats</title>
-            </Helmet>
-            <h2 className="text-lg mb-2 font-semibold">Confirming email...</h2>
-            <h4 className="text-gray-700 text-sm">Please wait, don't close this page...</h4>
-        </div>
-    )
-}
+  return (
+    <div className="mt-52 flex flex-col items-center justify-center">
+      <Helmet>
+        <title>Verify Email | Uber eats</title>
+      </Helmet>
+      <h2 className="text-lg mb-2 font-semibold">Confirming email...</h2>
+      <h4 className="text-gray-700 text-sm">Please wait, don't close this page...</h4>
+    </div>
+  );
+};
