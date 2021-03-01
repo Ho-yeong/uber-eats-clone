@@ -10,20 +10,20 @@ import { Search } from '../pages/client/search';
 import { Category } from '../pages/client/category';
 
 const ClientRoutes = [
-  <Route path="/" exact key="Restaurant">
+  <Route key={1} path="/" exact>
     <Restaurants />
   </Route>,
-  <Route path="/confirm" key="ConfirmEmail">
+  <Route key={2} path="/confirm">
     <ConfirmEmail />
   </Route>,
-  <Route path="/edit-profile" key="EditProfile">
+  <Route key={3} path="/edit-profile">
     <EditProfile />
   </Route>,
-  <Route path="/search">
-    <Search key="Search" />
+  <Route key={4} path="/search">
+    <Search />
   </Route>,
-  <Route path="/category/:slug">
-    <Category key="Category" />
+  <Route key={5} path="/category/:slug">
+    <Category />
   </Route>,
 ];
 

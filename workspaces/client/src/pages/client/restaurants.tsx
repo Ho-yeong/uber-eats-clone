@@ -86,10 +86,10 @@ export const Restaurants = () => {
       </form>
       {!loading && (
         <div className="max-w-screen-2xl mx-auto mt-8 pb-20">
-          <div className="flex justify-around max-w-xs mx-auto ">
+          <div className="flex justify-around max-w-xs mx-auto">
             {data?.allCategories.categories?.map(category => (
-              <Link to={`/category/${category.slug}`}>
-                <div className="flex flex-col items-center cursor-pointer group" key={category.id}>
+              <Link to={`/category/${category.slug}`} key={category.id}>
+                <div className="flex flex-col items-center cursor-pointer group">
                   <div
                     className="w-14 h-14 bg-cover group-hover:bg-gray-100 rounded-full "
                     style={{ backgroundImage: `url(${category.coverImg})` }}
