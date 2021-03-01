@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { gql, useLazyQuery } from '@apollo/client';
 import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from '../../fragments';
 import { category, categoryVariables } from '../../__generated__/category';
 import { Restaurant } from '../../components/restaurant';
@@ -42,10 +42,9 @@ interface IFormProps {
 
 export const Category: React.FC = () => {
   const params = useParams<ICategoryParams>();
-  const location = useLocation();
   const history = useHistory();
 
-  const [callQuery, { data, loading }] = useLazyQuery<category, categoryVariables>(CATEGORY_QUERY);
+  const [callQuery, { data }] = useLazyQuery<category, categoryVariables>(CATEGORY_QUERY);
 
   useEffect(() => {
     callQuery({
