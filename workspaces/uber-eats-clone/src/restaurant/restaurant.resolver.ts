@@ -17,10 +17,19 @@ import { Dish } from './entities/dish.entity';
 import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
 import { EditDishInput, EditDishOutput } from './dtos/edit-dish.dto';
 import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
+import { MyRestaurantsOutPut } from './dtos/my-restaurants.dto';
 
 @Resolver(of => Restaurant)
 export class RestaurantResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
+
+  @Query(returns => MyRestaurantsOutPut)
+  @Role(['Owner'])
+  async myRestaurants(
+    @AuthUser() authUser: User,
+  ): Promise<MyRestaurantsOutPut> {
+    return this.restaurantService.myRestaurants(authUser);
+  }
 
   @Mutation(returns => CreateRestaurantOutput)
   @Role(['Owner'])

@@ -17,6 +17,7 @@ import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { EditDishInput, EditDishOutput } from './dtos/edit-dish.dto';
 import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
+import { MyRestaurantsOutPut } from './dtos/my-restaurants.dto';
 
 @Injectable()
 export class RestaurantService {
@@ -25,6 +26,24 @@ export class RestaurantService {
     @InjectRepository(Dish) private readonly dishes: Repository<Dish>,
     private readonly categories: CategoryRepository,
   ) {}
+
+  async myRestaurants(owner: User): Promise<MyRestaurantsOutPut> {
+    try {
+      const restaurants = await this.restaurant.find({ owner })
+
+      return {
+        ok: true,
+        restaurants
+      }
+
+    } catch(err) {
+      return {
+        ok: false,
+        error: "Couldn't find restaurants"
+      }
+    }
+
+  } 
 
   async createRestaurant(
     owner: User,
