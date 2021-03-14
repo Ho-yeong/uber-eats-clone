@@ -29,6 +29,7 @@
 - yarn add tailwindcss
 - yarn add rimraf
 - yarn add react-helmet (yarn add react-helmet-async) (bc of warning)
+- yarn add mock-apollo-client
 
 ## apollo code
 - apollo client:codegen src/__generated__ --target=typescript --outputFlat

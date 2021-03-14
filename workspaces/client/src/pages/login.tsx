@@ -94,8 +94,8 @@ export const Login = () => {
             placeholder="Email"
             className="input"
           />
+          {errors.email?.type === 'pattern' && <FormError errorMessage={'Please enter a valid email'} />}
           {errors.email?.message && <FormError errorMessage={errors.email?.message} />}
-          {errors.email?.type && <FormError errorMessage={'Please enter a valid email'} />}
           <input
             ref={register({ required: 'Password is required', minLength: 10 })}
             type="password"
