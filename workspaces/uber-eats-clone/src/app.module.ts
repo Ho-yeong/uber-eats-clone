@@ -22,6 +22,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/entities/payment.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MyLoggerModule } from './my-logger/my-logger.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 //test
 @Module({
@@ -78,6 +79,7 @@ import { MyLoggerModule } from './my-logger/my-logger.module';
     PaymentsModule,
     ScheduleModule.forRoot(),
     MyLoggerModule,
+    UploadsModule
   ],
   controllers: [],
   providers: [],

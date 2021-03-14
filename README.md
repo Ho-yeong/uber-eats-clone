@@ -18,6 +18,7 @@
 - yarn add form-data
 - yarn add graphql-subscriptions
 - yarn add @nestjs/schedule
+- yarn add aws-sdk
 
 ## libraries - client
 - yarn add @apollo/client
