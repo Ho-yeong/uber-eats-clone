@@ -13,6 +13,7 @@ export interface createRestaurant_createRestaurant {
   __typename: "CreateRestaurantOutput";
   ok: boolean;
   error: string | null;
+  restaurantId: number | null;
 }
 
 export interface createRestaurant {
@@ -20,5 +21,5 @@ export interface createRestaurant {
 }
 
 export interface createRestaurantVariables {
-  iuput: CreateRestaurantInput;
+  input: CreateRestaurantInput;
 }

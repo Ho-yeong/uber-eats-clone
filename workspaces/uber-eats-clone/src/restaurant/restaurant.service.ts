@@ -29,21 +29,19 @@ export class RestaurantService {
 
   async myRestaurants(owner: User): Promise<MyRestaurantsOutPut> {
     try {
-      const restaurants = await this.restaurant.find({ owner })
+      const restaurants = await this.restaurant.find({ owner });
 
       return {
         ok: true,
-        restaurants
-      }
-
-    } catch(err) {
+        restaurants,
+      };
+    } catch (err) {
       return {
         ok: false,
-        error: "Couldn't find restaurants"
-      }
+        error: "Couldn't find restaurants",
+      };
     }
-
-  } 
+  }
 
   async createRestaurant(
     owner: User,
@@ -58,7 +56,7 @@ export class RestaurantService {
       newRestaurant.category = category;
 
       await this.restaurant.save(newRestaurant);
-      return { ok: true };
+      return { ok: true, restaurantId: newRestaurant.id };
     } catch (err) {
       return { ok: false, error: "Couldn't create a restaurant" };
     }
