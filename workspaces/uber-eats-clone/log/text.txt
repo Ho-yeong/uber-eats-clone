@@ -88,3 +88,24 @@
 [Fri Mar 19 2021 00:37:25 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
 [Fri Mar 19 2021 00:37:25 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
 [Fri Mar 19 2021 00:37:25 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 22:28:26 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 22:28:26 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 22:28:26 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:32:31 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 23:32:31 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 23:32:31 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:32:44 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:32:44 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 23:32:44 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 23:33:58 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 23:33:58 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:33:58 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 23:36:15 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:36:15 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 23:36:15 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 23:36:23 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 23:36:23 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:36:23 GMT+0900 (GMT+09:00)] Nest application successfully started 
+[Sun Mar 21 2021 23:42:49 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Sun Mar 21 2021 23:42:49 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Sun Mar 21 2021 23:42:49 GMT+0900 (GMT+09:00)] Nest application successfully started 
