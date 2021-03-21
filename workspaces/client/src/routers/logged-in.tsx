@@ -9,9 +9,10 @@ import { EditProfile } from '../pages/user/edit-profile';
 import { Search } from '../pages/client/search';
 import { Category } from '../pages/client/category';
 import { Restaurant } from '../pages/client/restaurant';
-import { MyRestaurants } from '../pages/owner/MyRestaurant';
 import { AddRestaurant } from '../pages/owner/add-restaurant';
 import { MyRestaurant } from '../pages/owner/my-restaurant';
+import { MyRestaurants } from '../pages/owner/MyRestaurants';
+import { AddDish } from '../pages/owner/add-dish';
 
 const clientRoutes = [
   {
@@ -55,6 +56,10 @@ const restaurantRoutes = [
   {
     path: '/restaurant/:id',
     component: <MyRestaurant />,
+  },
+  {
+    path: '/restaurant/:restaurantId/add-dish',
+    component: <AddDish />,
   },
 ];
 

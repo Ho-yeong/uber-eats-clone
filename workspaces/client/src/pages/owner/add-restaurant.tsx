@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { Button } from '../../components/button';
 import { FormError } from '../../components/form-error';
 import { createRestaurant, createRestaurantVariables } from '../../__generated__/createRestaurant';
-import { MY_RESTAURANTS_QUERY } from './MyRestaurant';
+import { MY_RESTAURANTS_QUERY } from './MyRestaurants';
 
 const CREATE_RESTAURANT_MUTATION = gql`
   mutation createRestaurant($input: CreateRestaurantInput!) {
@@ -115,14 +115,14 @@ export const AddRestaurant = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container flex flex-col items-center mt-52">
       <Helmet>
         <title>Add Restaurant</title>
       </Helmet>
-      <h1>Add Restaurant</h1>
+      <h1 className="font-semibold text-2xl mb-3">Add Restaurant</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-3 mt-5 max-w-screen-md m-auto mb-3"
+        className="grid gap-3 mt-5 max-w-screen-md w-full mb-3"
       >
         <input
           ref={register({ required: 'Name is required.' })}
