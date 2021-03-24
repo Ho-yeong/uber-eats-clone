@@ -46,7 +46,10 @@ export class RestaurantService {
 
   async myRestaurant(owner: User, { id }: MyRestaurantInput): Promise<MyRestaurantOutput> {
     try {
-      const restaurant = await this.restaurant.findOne({ id, owner }, { relations: ['menu'] });
+      const restaurant = await this.restaurant.findOne(
+        { id, owner },
+        { relations: ['menu', 'orders'] },
+      );
 
       return {
         ok: true,

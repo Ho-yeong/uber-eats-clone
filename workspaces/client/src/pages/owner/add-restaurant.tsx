@@ -77,7 +77,7 @@ export const AddRestaurant = () => {
     onCompleted,
   });
 
-  const { register, getValues, formState, errors, handleSubmit } = useForm<IFormProps>({
+  const { register, getValues, formState, handleSubmit } = useForm<IFormProps>({
     mode: 'onChange',
   });
 
