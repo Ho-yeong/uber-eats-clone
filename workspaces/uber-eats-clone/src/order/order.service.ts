@@ -55,7 +55,7 @@ export class OrderService {
             if (dishOption.extra) {
               dishFinalPrice += dishOption.extra;
             } else {
-              const dishOptionChoice = dishOption.choice.find(
+              const dishOptionChoice = dishOption.choice?.find(
                 optionChoice => optionChoice.name === itemOption.choice,
               );
               if (dishOptionChoice) {
@@ -87,7 +87,7 @@ export class OrderService {
       await this.pubSub.publish(NEW_PENDING_ORDER, {
         pendingOrders: { order, ownerId: restaurant.ownerId },
       });
-      return { ok: true };
+      return { ok: true, orderId: order.id };
     } catch (err) {
       return { ok: false, error: "Couldn't create order" };
     }
