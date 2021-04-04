@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"todo\"",
-    "start": "cd workspaces/uber-eats-clone && yarn run build && yarn run start:prod"
+    "start": "cd workspaces/uber-eats-clone && yarn run build && node dist/main"
   },
   "keywords": [
     "nestjs",
