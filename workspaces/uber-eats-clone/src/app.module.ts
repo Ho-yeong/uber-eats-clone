@@ -79,7 +79,7 @@ import { UploadsModule } from './uploads/uploads.module';
     PaymentsModule,
     ScheduleModule.forRoot(),
     MyLoggerModule,
-    UploadsModule
+    UploadsModule,
   ],
   controllers: [],
   providers: [],
