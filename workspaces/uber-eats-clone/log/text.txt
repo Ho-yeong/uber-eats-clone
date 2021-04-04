@@ -163,3 +163,6 @@
 [Sun Apr 04 2021 18:08:51 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
 [Sun Apr 04 2021 18:08:51 GMT+0900 (GMT+09:00)] Nest application successfully started 
 [Sun Apr 04 2021 18:08:51 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Mon Apr 05 2021 00:41:30 GMT+0900 (GMT+09:00)] UploadsController {/uploads}: 
+[Mon Apr 05 2021 00:41:30 GMT+0900 (GMT+09:00)] Mapped {/uploads, POST} route 
+[Mon Apr 05 2021 00:41:30 GMT+0900 (GMT+09:00)] Nest application successfully started 
