@@ -1,10 +1,15 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import gql from 'graphql-tag';
-import React from 'react';
-import { useParams } from 'react-router';
+import React, { useEffect } from 'react';
+import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Dish } from '../../components/dish';
-import { DISH_FRAGMENT, OREDER_FRAGMENT, RESTAURANT_FRAGMENT } from '../../fragments';
+import {
+  DISH_FRAGMENT,
+  FULL_ORDER_FRAGMENT,
+  OREDER_FRAGMENT,
+  RESTAURANT_FRAGMENT,
+} from '../../fragments';
 import { myRestaurant, myRestaurantVariables } from '../../__generated__/myRestaurant';
 import {
   VictoryChart,
@@ -15,6 +20,8 @@ import {
   VictoryTooltip,
   VictoryLabel,
 } from 'victory';
+import { Helmet } from 'react-helmet-async';
+import { pendingOrders } from '../../__generated__/pendingOrders';
 
 export const MY_RESTAURNAT_QUERY = gql`
   query myRestaurant($input: MyRestaurantInput!) {
@@ -41,6 +48,15 @@ interface IParams {
   id: string;
 }
 
+const PENDING_ORDERS_SUBSCRIPTION = gql`
+  subscription pendingOrders {
+    pendingOrders {
+      ...FullOrderParts
+    }
+  }
+  ${FULL_ORDER_FRAGMENT}
+`;
+
 export const MyRestaurant = () => {
   const { id } = useParams<IParams>();
 
@@ -52,13 +68,26 @@ export const MyRestaurant = () => {
     },
   });
 
+  const { data: subscriptionData } = useSubscription<pendingOrders>(PENDING_ORDERS_SUBSCRIPTION);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (subscriptionData?.pendingOrders.id) {
+      history.push(`/order/${subscriptionData.pendingOrders.id}`);
+    }
+  }, [history, subscriptionData]);
+
   return (
     <div>
+      <Helmet>
+        <title>{data?.myRestaurant.restaurant?.name || 'Loading...'} | Uber Eats</title>
+      </Helmet>
       <div
         className="bg-gray-700 py-28 bg-center bg-cover"
         style={{ backgroundImage: `url(${data?.myRestaurant.restaurant?.coverImg})` }}
       />
-      <div className="container mt-10">
+      <div className="container mt-10 px-5">
         <h2 className="text-4xl font-medium mb-10">
           {data?.myRestaurant.restaurant?.name || 'Loading'}
         </h2>
@@ -69,7 +98,7 @@ export const MyRestaurant = () => {
           Buy Promotion &rarr;
         </Link>
       </div>
-      <div className="mt-10">
+      <div className="mt-10 px-5">
         {data?.myRestaurant.restaurant?.menu.length === 0 ? (
           <h4 className="text-xl mb-5">Please Upload a dish</h4>
         ) : (

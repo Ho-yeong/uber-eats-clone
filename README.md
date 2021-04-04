@@ -31,6 +31,8 @@
 - yarn add rimraf
 - yarn add react-helmet (yarn add react-helmet-async) (bc of warning)
 - yarn add mock-apollo-client
+- yarn add subscriptions-transport-ws
+- yarn add google-map-react / @types
 
 ## apollo code
 - apollo client:codegen src/__generated__ --target=typescript --outputFlat

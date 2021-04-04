@@ -131,7 +131,7 @@ export const Restaurant = () => {
 
     if (ok) {
       alert('order created!');
-      history.push(`/orders/${orderId}`);
+      history.push(`/order/${orderId}`);
     }
   };
   const [makeOrderMutation, { loading: placingOrder }] = useMutation<
@@ -140,6 +140,9 @@ export const Restaurant = () => {
   >(CREATE_ORDER_MUTATION, { onCompleted });
 
   const triggerConfirmOrder = () => {
+    if (placingOrder) {
+      return;
+    }
     if (orderItems.length === 0) {
       window.alert("Can't place empty order");
       return;

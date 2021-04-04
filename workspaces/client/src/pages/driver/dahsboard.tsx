@@ -1,0 +1,63 @@
+import React, { useEffect, useState } from 'react';
+import GoogleMapReact from 'google-map-react';
+
+interface ICoords {
+  lat: number;
+  lng: number;
+}
+
+interface IDriverProps {
+  lat: number;
+  lng: number;
+  $hover?: any;
+}
+
+const Driver: React.FC<IDriverProps> = () => <div className="text-2xl">🛵</div>;
+
+export const Dashboard = () => {
+  const [driverCoords, setDriverCoords] = useState<ICoords>({ lat: 0, lng: 0 });
+  const [map, setMap] = useState<any>();
+  const [maps, setMaps] = useState<any>();
+
+  const onSuccess = ({ coords: { latitude, longitude } }: GeolocationPosition) => {
+    setDriverCoords({ lat: latitude, lng: longitude });
+  };
+  const onError = (error: GeolocationPositionError) => {
+    console.log(error);
+  };
+
+  useEffect(() => {
+    navigator.geolocation.watchPosition(onSuccess, onError, {
+      enableHighAccuracy: true,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (map && maps) {
+      map.panTo(new maps.LatLng(driverCoords.lat, driverCoords.lng));
+    }
+    //eslint-disable-next-line
+  }, [driverCoords.lat, driverCoords.lng]);
+
+  const onApiLoaded = ({ map, maps }: { map: any; maps: any }) => {
+    setMap(map);
+    setMaps(maps);
+    map.panTo(new maps.LatLng(driverCoords.lat, driverCoords.lng));
+  };
+
+  return (
+    <div>
+      <div className="overflow-hidden" style={{ width: '100%', height: '50vh' }}>
+        <GoogleMapReact
+          defaultCenter={{ lat: 35.15, lng: 128.0666 }}
+          defaultZoom={16}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={onApiLoaded}
+          bootstrapURLKeys={{ key: 'AIzaSyBtwl0J5CkyERhsLM02AjgDWg5UhGmAa2U' }}
+        >
+          <Driver lat={driverCoords.lat} lng={driverCoords.lng} />
+        </GoogleMapReact>
+      </div>
+    </div>
+  );
+};
