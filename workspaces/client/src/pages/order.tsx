@@ -160,6 +160,36 @@ export const Order = () => {
                 )}
             </>
           )}
+          {userData?.me.role === UserRole.Delivery && (
+            <>
+              {data?.getOrder.order?.status === OrderStatus.Cooked && (
+                <button
+                  className="btn"
+                  onClick={() => {
+                    onButtonClick(OrderStatus.PickedUp);
+                  }}
+                >
+                  Picked Up
+                </button>
+              )}
+              {data?.getOrder.order?.status === OrderStatus.PickedUp && (
+                <button
+                  className="btn"
+                  onClick={() => {
+                    onButtonClick(OrderStatus.Delivered);
+                  }}
+                >
+                  Order Delivered
+                </button>
+              )}
+            </>
+          )}
+          {data?.getOrder.order?.status === OrderStatus.Delivered && (
+            <div className="border-t py-10 border-gray-700 text-center">
+              Status:{' '}
+              <span className="font-bold text-lime-600">Thank you for your using uber eats!</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

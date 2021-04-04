@@ -7,6 +7,7 @@ import { Dish } from '../../components/dish';
 import { CreateOrderItemInput } from '../../__generated__/globalTypes';
 import { DishOption } from '../../components/dish-option';
 import { createOrder, createOrderVariables } from '../../__generated__/createOrder';
+import { Helmet } from 'react-helmet-async';
 
 const RESTAURANT_QUERY = gql`
   query restaurant($input: RestaurantInput!) {
@@ -165,11 +166,14 @@ export const Restaurant = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>{data?.restaurant.restaurant?.name || 'Loading...'} | Uber Eats</title>
+      </Helmet>
       <div
-        className="bg-gray-600 py-48 bg-center bg-cover"
+        className="bg-gray-700 py-28 bg-center bg-cover"
         style={{ backgroundImage: `url(${data?.restaurant.restaurant?.coverImg})` }}
       >
-        <div className="bg-white w-1/4 py-8 pl-52">
+        <div className="bg-white w-2/4 lg:w-1/4 py-8 text-left">
           <h4 className="text-4xl mb-3">{data?.restaurant.restaurant?.name}</h4>
           <h5 className="text-sm font-light mt-2">{data?.restaurant.restaurant?.category?.name}</h5>
           <h6 className="text-sm font-light">{data?.restaurant.restaurant?.address}</h6>
@@ -177,12 +181,12 @@ export const Restaurant = () => {
       </div>
       <div className="mt-20 pb-32 container flex flex-col items-end">
         {!orderStarted && (
-          <button className="btn px-10" onClick={triggerStartOrder}>
+          <button className="btn px-10 mb-8 " onClick={triggerStartOrder}>
             Start Order
           </button>
         )}
         {orderStarted && (
-          <div className="flex items-center">
+          <div className="flex items-center mb-8 ">
             <button className="btn px-10 mr-2" onClick={triggerConfirmOrder}>
               Confirm Order
             </button>
