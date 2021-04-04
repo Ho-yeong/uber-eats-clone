@@ -16,7 +16,7 @@ const Driver: React.FC<IDriverProps> = () => <div className="text-2xl">🛵</div
 
 export const Dashboard = () => {
   const [driverCoords, setDriverCoords] = useState<ICoords>({ lat: 0, lng: 0 });
-  const [map, setMap] = useState<any>();
+  const [map, setMap] = useState<google.maps.Map>();
   const [maps, setMaps] = useState<any>();
 
   const onSuccess = ({ coords: { latitude, longitude } }: GeolocationPosition) => {
@@ -33,8 +33,16 @@ export const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (map && maps) {
-      map.panTo(new maps.LatLng(driverCoords.lat, driverCoords.lng));
+    if (map) {
+      map.panTo(new google.maps.LatLng(driverCoords.lat, driverCoords.lng));
+      //좌표로 주소 찾기
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode(
+        { location: new google.maps.LatLng(driverCoords.lat, driverCoords.lng) },
+        (result, status) => {
+          console.log(status, result);
+        },
+      );
     }
     //eslint-disable-next-line
   }, [driverCoords.lat, driverCoords.lng]);
@@ -42,7 +50,30 @@ export const Dashboard = () => {
   const onApiLoaded = ({ map, maps }: { map: any; maps: any }) => {
     setMap(map);
     setMaps(maps);
-    map.panTo(new maps.LatLng(driverCoords.lat, driverCoords.lng));
+    map.panTo(new google.maps.LatLng(driverCoords.lat, driverCoords.lng));
+  };
+
+  const onGetRouteClick = () => {
+    if (map) {
+      const directionService = new google.maps.DirectionsService();
+      const directionRenderer = new google.maps.DirectionsRenderer();
+      directionRenderer.setMap(map);
+      directionService.route(
+        {
+          origin: {
+            location: new google.maps.LatLng(driverCoords.lat, driverCoords.lng),
+          },
+          destination: {
+            location: new google.maps.LatLng(driverCoords.lat + 0.1, driverCoords.lng + 0.001),
+          },
+          // 한국에서는 길찾기 지원 안됨
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        result => {
+          directionRenderer.setDirections(result);
+        },
+      );
+    }
   };
 
   return (
@@ -58,6 +89,7 @@ export const Dashboard = () => {
           <Driver lat={driverCoords.lat} lng={driverCoords.lng} />
         </GoogleMapReact>
       </div>
+      <button onClick={onGetRouteClick}>Get</button>
     </div>
   );
 };

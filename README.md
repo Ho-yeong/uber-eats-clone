@@ -33,6 +33,7 @@
 - yarn add mock-apollo-client
 - yarn add subscriptions-transport-ws
 - yarn add google-map-react / @types
+- yarn add @types/googlemaps -d
 
 ## apollo code
 - apollo client:codegen src/__generated__ --target=typescript --outputFlat
